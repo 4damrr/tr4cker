@@ -1,0 +1,113 @@
+:root {
+  color-scheme: dark;
+  --bg: #12110f;
+  --panel: #1c1b18;
+  --line: #2e2c28;
+  --text: #ece8df;
+  --muted: #a39b8c;
+  --accent: #d4a017;
+  --danger: #c45c4a;
+  --font: "Iowan Old Style", "Palatino Linotype", Palatino, "Times New Roman", serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font);
+}
+
+.shell {
+  max-width: 40rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem 4rem;
+}
+
+.top { margin-bottom: 2rem; }
+
+.brand {
+  color: var(--text);
+  text-decoration: none;
+  font-size: 1.5rem;
+  letter-spacing: 0.04em;
+}
+
+.tagline {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+}
+
+.panel {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 0.75rem;
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+}
+
+h1, h2 { margin: 0 0 1rem; font-weight: 600; }
+h2 { font-size: 1.05rem; }
+
+.expense-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+input {
+  width: 100%;
+  padding: 0.6rem 0.7rem;
+  border: 1px solid var(--line);
+  border-radius: 0.4rem;
+  background: var(--bg);
+  color: var(--text);
+  font: inherit;
+}
+
+button {
+  font: inherit;
+  cursor: pointer;
+  border: 0;
+  border-radius: 0.4rem;
+  padding: 0.65rem 0.9rem;
+  background: var(--accent);
+  color: #1a1404;
+}
+
+button.ghost {
+  background: transparent;
+  color: var(--danger);
+  padding: 0.2rem 0;
+}
+
+.list-head {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 1rem;
+}
+
+.total, .amount { font-variant-numeric: tabular-nums; }
+.total { color: var(--muted); margin: 0; }
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-top: 1px solid var(--line);
+}
+
+.row-title { margin: 0; }
+.row-meta { margin: 0.2rem 0 0; color: var(--muted); font-size: 0.85rem; }
+.row-actions { display: grid; justify-items: end; align-content: center; gap: 0.25rem; }
+.empty { color: var(--muted); }

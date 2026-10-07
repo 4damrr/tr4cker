@@ -1,0 +1,26 @@
+{{define "content"}}
+<section class="panel">
+  <h1>Expenses</h1>
+  <form
+    class="expense-form"
+    hx-post="/expenses"
+    hx-target="#expense-list"
+    hx-swap="outerHTML"
+    hx-on::after-request="if(event.detail.successful) this.reset()"
+  >
+    <label>
+      Description
+      <input type="text" name="description" placeholder="Coffee, groceries, rent" required>
+    </label>
+    <label>
+      Amount
+      <input type="number" name="amount" step="0.01" placeholder="0.00" required>
+    </label>
+    <button type="submit">Add</button>
+  </form>
+</section>
+
+<section class="panel">
+  {{template "expense-list" .}}
+</section>
+{{end}}

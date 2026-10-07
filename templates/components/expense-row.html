@@ -1,0 +1,18 @@
+{{define "expense-row"}}
+<article class="row" id="expense-{{.ID}}">
+  <div>
+    <p class="row-title">{{.Description}}</p>
+    <p class="row-meta">{{.CreatedAt}}</p>
+  </div>
+  <div class="row-actions">
+    <span class="amount">{{printf "%.2f" .Amount}}</span>
+    <button
+      type="button"
+      class="ghost"
+      hx-delete="/expenses/{{.ID}}"
+      hx-target="#expense-list"
+      hx-swap="outerHTML"
+    >Remove</button>
+  </div>
+</article>
+{{end}}

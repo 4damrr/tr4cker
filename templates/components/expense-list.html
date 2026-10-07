@@ -1,0 +1,15 @@
+{{define "expense-list"}}
+<div id="expense-list">
+  <div class="list-head">
+    <h2>Recent</h2>
+    <p class="total">Total {{printf "%.2f" .Total}}</p>
+  </div>
+  <div id="expense-rows">
+    {{range .Expenses}}
+      {{template "expense-row" .}}
+    {{else}}
+      <p class="empty">No expenses yet.</p>
+    {{end}}
+  </div>
+</div>
+{{end}}
