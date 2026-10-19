@@ -1,0 +1,89 @@
+{{define "dashboard-content"}}
+{{with .Dashboard}}
+<section class="panel">
+  <div class="panel-head">
+    <h1>{{.PeriodLabel}}</h1>
+    <p class="muted">Current financial period</p>
+  </div>
+  {{template "dashboard-figures" .}}
+</section>
+
+<section class="panel">
+  <div class="list-head">
+    <h2>Plan progress</h2>
+    <a class="ghost-link" href="/planning{{periodQuery .Period nil}}">Edit plan</a>
+  </div>
+  {{template "plan-progress" .}}
+</section>
+
+<section class="panel">
+  <div class="list-head">
+    <h2>Recent transactions</h2>
+    <a class="ghost-link" href="/transactions">All transactions</a>
+  </div>
+  {{template "transaction-rows" .Recent}}
+  <p class="quick-entry"><a class="button" href="/transactions/new">Add transaction</a></p>
+</section>
+{{end}}
+{{end}}
+
+{{define "dashboard-figures"}}
+<div class="tiles" id="dashboard-figures">
+  <div class="tile">
+    <p class="tile-label">Total balance</p>
+    <p class="tile-value">{{.TotalBalanceText}}</p>
+    <ul class="mini-list">
+      {{range .Accounts}}
+        <li><span>{{.Key}}</span><span class="amount">{{.BalanceLabel}}</span></li>
+      {{else}}
+        <li class="muted">No accounts yet.</li>
+      {{end}}
+    </ul>
+  </div>
+  <div class="tile">
+    <p class="tile-label">Income</p>
+    <p class="tile-value">{{.IncomeText}}</p>
+  </div>
+  <div class="tile">
+    <p class="tile-label">Spending</p>
+    <p class="tile-value">{{.SpendingText}}</p>
+  </div>
+  <div class="tile">
+    <p class="tile-label">Remaining planned</p>
+    {{if .HasPlans}}
+      <p class="tile-value{{if .IsOver}} is-over{{end}}">{{.RemainingText}}</p>
+      <p class="muted">{{.PlannedCount}} planned categories</p>
+    {{else}}
+      <p class="tile-value is-quiet">No plan</p>
+      <p class="muted"><a href="/planning">Plan this period</a></p>
+    {{end}}
+  </div>
+</div>
+{{end}}
+
+{{define "plan-progress"}}
+<ul class="progress-list">
+  {{range .PlanRows}}
+    {{if .Planned}}
+      <li class="progress-row">
+        <div class="progress-head">
+          <span class="progress-name">{{.Category}} <span class="chip">{{.BucketLabel}}</span></span>
+          <span class="amount">{{.ProgressText}}</span>
+        </div>
+        {{template "progressBar" .Bar}}
+        <p class="progress-meta">
+          {{if .IsSavings}}
+            Target {{.AmountLabel}} &middot; Saved {{.ActualLabel}}
+          {{else}}
+            Planned {{.AmountLabel}} &middot; Spent {{.ActualLabel}}
+            {{if .HasRemain}} &middot; Remaining <span class="amount">{{.RemainingText}}</span>{{end}}
+            {{if .Overspent}} <span class="warn">overspent</span>{{end}}
+          {{end}}
+        </p>
+      </li>
+    {{end}}
+  {{else}}
+    <li class="empty">Nothing planned for this period yet.</li>
+  {{end}}
+</ul>
+{{end}}

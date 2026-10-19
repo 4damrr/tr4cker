@@ -1,0 +1,16 @@
+{{define "planning-content"}}
+{{with .Planning}}
+<section class="panel">
+  <div class="list-head">
+    <h1>Planning</h1>
+    <div class="period-nav">
+      <a class="ghost-link" href="/planning{{.PrevQuery}}" hx-get="/planning{{.PrevQuery}}" hx-target="#plan-rows" hx-swap="outerHTML">&larr; Previous</a>
+      <span class="period-label">{{.PeriodLabel}}</span>
+      <a class="ghost-link" href="/planning{{.NextQuery}}" hx-get="/planning{{.NextQuery}}" hx-target="#plan-rows" hx-swap="outerHTML">Next &rarr;</a>
+    </div>
+  </div>
+  <p class="muted">Planned amounts are spending limits for needs and wants, and targets for savings.</p>
+  {{template "plan-rows" .}}
+</section>
+{{end}}
+{{end}}

@@ -1,0 +1,25 @@
+{{define "transactions-content"}}
+{{with .Transactions}}
+<section class="panel">
+  <div class="list-head">
+    <h1>Transactions</h1>
+    <a class="button" href="/transactions/new">Add transaction</a>
+  </div>
+
+  <form class="filters" method="get" action="/transactions" hx-get="/transactions" hx-target="#transaction-list" hx-swap="outerHTML">
+    <label>
+      Type
+      <select name="type" onchange="this.form.requestSubmit()">
+        <option value="">All types</option>
+        {{range .Types}}
+          <option value="{{.}}"{{if eq (printf "%s" .) $.Transactions.Type}} selected{{end}}>{{typeLabel .}}</option>
+        {{end}}
+      </select>
+    </label>
+    <noscript><button type="submit" class="ghost">Filter</button></noscript>
+  </form>
+
+  {{template "transaction-list" .}}
+</section>
+{{end}}
+{{end}}
