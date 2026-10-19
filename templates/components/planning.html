@@ -1,0 +1,69 @@
+{{define "plan-rows"}}
+<div id="plan-rows" class="stack">
+  {{range .Rows}}
+    <article class="plan-row" id="plan-{{.Category}}">
+      <div class="progress-head">
+        <span class="progress-name">{{.Category}} <span class="chip chip-{{.Bucket}}">{{.BucketLabel}}</span></span>
+        {{if .Planned}}<span class="amount">{{.ProgressText}}</span>{{end}}
+      </div>
+
+      {{if .Planned}}
+        {{template "progressBar" .Bar}}
+        <p class="progress-meta">
+          {{if .IsSavings}}
+            Target <span class="amount">{{.AmountLabel}}</span> &middot;
+            Saved <span class="amount">{{.ActualLabel}}</span>
+          {{else}}
+            Planned <span class="amount">{{.AmountLabel}}</span> &middot;
+            Spent <span class="amount">{{.ActualLabel}}</span>
+            {{if .HasRemain}} &middot;
+              Remaining <span class="amount{{if .Overspent}} is-over{{end}}">{{.RemainingText}}</span>
+              {{if .Overspent}}<span class="warn">overspent</span>{{end}}
+            {{end}}
+          {{end}}
+        </p>
+      {{else}}
+        <p class="progress-meta">Spent <span class="amount">{{.ActualLabel}}</span> &middot; no plan set</p>
+      {{end}}
+
+      <form
+        class="plan-form"
+        hx-post="/planning{{.CurrentQuery}}"
+        hx-target="#plan-rows"
+        hx-swap="outerHTML"
+      >
+        <input type="hidden" name="category" value="{{.Category}}">
+        <input type="hidden" name="amount_field" value="amount">
+        <label class="inline">
+          Planned amount
+          <input
+            type="text"
+            inputmode="decimal"
+            name="amount"
+            value="{{.AmountValue}}"
+            placeholder="0"
+            aria-label="Planned amount for {{.Category}}"
+          >
+        </label>
+        <label class="inline">
+          Notes
+          <input type="text" name="notes" value="{{.Notes}}" placeholder="optional" aria-label="Plan notes for {{.Category}}">
+        </label>
+        <button type="submit">Save</button>
+        {{if .Planned}}
+          <button
+            type="button"
+            class="ghost"
+            hx-post="/planning{{.CurrentQuery}}"
+            hx-vals='{"amount":"0","amount_field":"amount"}'
+            hx-target="#plan-rows"
+            hx-swap="outerHTML"
+          >Clear</button>
+        {{end}}
+      </form>
+    </article>
+  {{else}}
+    <p class="empty">No active categories yet. Add some on the accounts page.</p>
+  {{end}}
+</div>
+{{end}}

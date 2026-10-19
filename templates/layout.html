@@ -1,10 +1,9 @@
-{{define "layout"}}
-<!DOCTYPE html>
+{{define "layout"}}<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{{if .Title}}{{.Title}} · {{end}}tr4cker</title>
+  <title>{{if .Title}}{{.Title}} &middot; {{end}}tr4cker</title>
   <link rel="stylesheet" href="/static/css/app.css">
   <script src="/static/js/htmx.min.js" defer></script>
 </head>
@@ -13,11 +12,34 @@
     <header class="top">
       <a class="brand" href="/">tr4cker</a>
       <p class="tagline">Track spending. Stay mindful.</p>
+      {{template "nav" .}}
     </header>
     <main>
       {{template "content" .}}
     </main>
   </div>
 </body>
-</html>
+</html>{{end}}
+
+{{define "nav"}}
+<nav class="nav" aria-label="Main">
+  <a class="nav-link{{if eq .Nav "dashboard"}} is-active{{end}}" href="/">Dashboard</a>
+  <a class="nav-link{{if eq .Nav "transactions"}} is-active{{end}}" href="/transactions">Transactions</a>
+  <a class="nav-link{{if eq .Nav "planning"}} is-active{{end}}" href="/planning">Planning</a>
+  <a class="nav-link{{if eq .Nav "tobuy"}} is-active{{end}}" href="/to-buy">To Buy</a>
+  <a class="nav-link{{if eq .Nav "accounts"}} is-active{{end}}" href="/accounts">Accounts</a>
+</nav>
 {{end}}
+
+{{/* money renders an amount with grouping separators and a trimmed decimal part. */}}
+{{define "money"}}{{.String}}{{end}}
+
+{{/* progressBar renders a prepared bar: Percent (0-100), Over, Label. */}}
+{{define "progressBar"}}
+<div class="bar{{if .Over}} is-over{{end}}" role="img" aria-label="{{.Label}}">
+  <span class="bar-fill" style="width: {{.Percent}}%"></span>
+</div>
+{{end}}
+
+{{/* periodLabel renders a financial period. */}}
+{{define "periodLabel"}}{{.Label}}{{end}}

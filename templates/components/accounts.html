@@ -1,0 +1,91 @@
+{{define "account-list"}}
+<div id="account-list" class="stack">
+  <div id="account-error"></div>
+  {{if .Accounts}}
+    <ul class="rows">
+      {{range .Accounts}}
+        <li class="row">
+          <div class="row-main">
+            <p class="row-title">{{.Key}}</p>
+            <p class="row-meta">{{if .Notes}}{{.Notes}}{{else}}<span class="muted">No notes</span>{{end}}</p>
+          </div>
+          <div class="row-actions">
+            <span class="amount">{{.BalanceLabel}}</span>
+            <details class="inline-edit">
+              <summary class="ghost-link">Edit</summary>
+              <form
+                class="stack"
+                hx-post="/accounts/{{.Key}}"
+                hx-target="#account-list"
+                hx-swap="outerHTML"
+              >
+                <label>
+                  Balance
+                  <input type="text" inputmode="decimal" name="balance" value="{{.Balance}}">
+                </label>
+                <label>
+                  Notes
+                  <input type="text" name="notes" value="{{.Notes}}">
+                </label>
+                <button type="submit">Save</button>
+              </form>
+            </details>
+            <button
+              type="button"
+              class="ghost"
+              hx-delete="/accounts/{{.Key}}"
+              hx-target="#account-list"
+              hx-swap="outerHTML"
+            >Deactivate</button>
+          </div>
+        </li>
+      {{end}}
+    </ul>
+  {{else}}
+    <p class="empty">No accounts yet. Add one above.</p>
+  {{end}}
+</div>
+{{end}}
+
+{{define "category-list"}}
+<div id="category-list" class="stack">
+  <div id="category-error"></div>
+  {{if .Categories}}
+    <ul class="rows">
+      {{range .Categories}}
+        <li class="row">
+          <div class="row-main">
+            <p class="row-title">{{.Key}}</p>
+          </div>
+          <div class="row-actions">
+            <form
+              class="inline-form"
+              hx-post="/categories/{{.Key}}"
+              hx-target="#category-list"
+              hx-swap="outerHTML"
+            >
+              <select name="buckets" aria-label="Bucket for {{.Key}}">
+                {{$current := .Bucket}}
+                {{range $.Buckets}}
+                  <option value="{{.}}"{{if eq . $current}} selected{{end}}>{{bucketLabel .}}</option>
+                {{end}}
+              </select>
+              <button type="submit">Save</button>
+            </form>
+            <span class="chip chip-{{.Bucket}}">{{.BucketLabel}}</span>
+            <button
+              type="button"
+              class="ghost"
+              hx-delete="/categories/{{.Key}}"
+              hx-target="#category-list"
+              hx-swap="outerHTML"
+            >Deactivate</button>
+          </div>
+        </li>
+      {{end}}
+    </ul>
+  {{else}}
+    <p class="empty">No categories yet. Add one above.</p>
+  {{end}}
+</div>
+{{end}}

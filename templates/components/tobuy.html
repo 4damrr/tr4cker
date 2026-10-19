@@ -1,0 +1,57 @@
+{{define "tobuy-list"}}
+<div id="tobuy-list" class="stack">
+  {{if .Rows}}
+    <ul class="rows">
+      {{range .Rows}}
+        <li class="row" id="tobuy-{{.ID}}">
+          <div class="row-main">
+            <p class="row-title">
+              {{.Name}}
+              <span class="chip chip-priority-{{.Priority}}">{{.PriorityText}}</span>
+              <span class="chip chip-status-{{.Status}}">{{.StatusLabel}}</span>
+            </p>
+            <p class="row-meta">
+              {{.Category}} &middot; {{.Qty}} &times; {{.PriceLabel}}
+              {{if .URL}} &middot; <a href="{{.URL}}" rel="noreferrer noopener">link</a>{{end}}
+              {{if .Notes}} &middot; {{.Notes}}{{end}}
+            </p>
+          </div>
+          <div class="row-actions">
+            <span class="amount">{{.TotalLabel}}</span>
+            <span class="row-buttons">
+              {{if eq .Status "to_buy"}}
+                <button
+                  type="button" class="ghost"
+                  hx-post="/to-buy/{{.ID}}/status"
+                  hx-vals='{"status":"bought"}'
+                  hx-target="#tobuy-list" hx-swap="outerHTML"
+                >Mark bought</button>
+              {{else}}
+                <button
+                  type="button" class="ghost"
+                  hx-post="/to-buy/{{.ID}}/status"
+                  hx-vals='{"status":"to_buy"}'
+                  hx-target="#tobuy-list" hx-swap="outerHTML"
+                >Reopen</button>
+              {{end}}
+              <button
+                type="button" class="ghost"
+                hx-post="/to-buy/{{.ID}}/status"
+                hx-vals='{"status":"canceled"}'
+                hx-target="#tobuy-list" hx-swap="outerHTML"
+              >Cancel</button>
+              <button
+                type="button" class="ghost"
+                hx-delete="/to-buy/{{.ID}}"
+                hx-target="#tobuy-list" hx-swap="outerHTML"
+              >Remove</button>
+            </span>
+          </div>
+        </li>
+      {{end}}
+    </ul>
+  {{else}}
+    <p class="empty">Nothing here yet.</p>
+  {{end}}
+</div>
+{{end}}

@@ -33,7 +33,7 @@ Typical money-tracking apps show historical spending but not whether the current
 
 ## Impact
 
-- **Schema**: `internal/db/db.go` migrations replace `expenses` (`amount REAL`) with the five domain tables and integer IDR amounts.
+- **Schema**: `internal/db/db.go` migrations replace `expenses` (`amount REAL`) with the five domain tables and floating-point IDR amounts.
 - **HTTP**: `internal/web/` grows from `GET /`, `POST /expenses`, and `DELETE /expenses/{id}` to page and HTMX routes for dashboard, transactions, categories (as needed for forms), accounts, planning, and to-buy.
 - **UI**: `templates/` and `static/css/app.css` replace the expense form/list with multi-page layout and navigation; keep Go templates + vendored HTMX, no SPA framework.
 - **Data**: Existing local `data/tr4cker.db` expense rows are not migrated; this is a local personal app still in boilerplate.

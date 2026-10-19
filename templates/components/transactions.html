@@ -1,0 +1,43 @@
+{{define "transaction-list"}}
+<div id="transaction-list" class="stack">
+  {{template "transaction-rows" .Rows}}
+</div>
+{{end}}
+
+{{define "transaction-rows"}}
+{{if .}}
+<ul class="rows">
+  {{range .}}
+    <li class="row">
+      <div class="row-main">
+        <p class="row-title">
+          {{.Category}}
+          <span class="chip chip-{{.Type}}">{{typeLabel .Type}}</span>
+          {{if .IsInvestment}}<span class="chip chip-investment">Investment</span>{{end}}
+        </p>
+        <p class="row-meta">{{.AtLabel}} &middot; {{.Accounts}}</p>
+      </div>
+      <div class="row-actions">
+        <span class="amount amount-{{.Type}}">{{.AmountLabel}}</span>
+        <span class="row-buttons">
+          <a class="ghost-link" href="/transactions/{{.ID}}/edit">Edit</a>
+          <button
+            type="button"
+            class="ghost"
+            hx-delete="/transactions/{{.ID}}"
+            hx-target="#transaction-list"
+            hx-swap="outerHTML"
+          >Delete</button>
+        </span>
+      </div>
+    </li>
+  {{end}}
+</ul>
+{{else}}
+<p class="empty">No transactions yet.</p>
+{{end}}
+{{end}}
+
+{{define "form-error"}}
+<p class="form-error" role="alert">{{.Error}}</p>
+{{end}}

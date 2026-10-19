@@ -28,12 +28,20 @@ The system MUST NOT count transfer amounts as spending when calculating spending
 - **WHEN** spending for the current period is 900000 and the user records a 100000 transfer between two held accounts
 - **THEN** period spending remains 900000
 
-### Requirement: Transaction amounts are exact IDR integers
-The system SHALL store and display transaction amounts as whole rupiah integers, not floating-point values.
+### Requirement: Transaction amounts are floating-point money
+The system SHALL store transaction amounts as floating-point values rounded to two decimal places.
 
-#### Scenario: Store a cash amount
+#### Scenario: Store a whole amount
 - **WHEN** the user records an amount of Rp 25,000
-- **THEN** the stored amount is 25000 with no fractional currency unit
+- **THEN** the stored amount is 25000
+
+#### Scenario: Store a fractional amount
+- **WHEN** the user records an amount of Rp 25,000.50
+- **THEN** the stored amount is 25000.50
+
+#### Scenario: Round finer input
+- **WHEN** the user records an amount of Rp 25,000.505
+- **THEN** the stored amount is 25000.51
 
 ### Requirement: Fast transaction entry
 The system SHALL let the user record a transaction with type, amount, category, source account, destination account, and occurrence time, using defaults so common expenses need few inputs.

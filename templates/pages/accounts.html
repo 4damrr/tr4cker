@@ -1,0 +1,50 @@
+{{define "accounts-content"}}
+{{with .Accounts}}
+<section class="panel">
+  <div class="list-head">
+    <h1>Accounts</h1>
+  </div>
+
+  <form class="entry-form" hx-post="/accounts" hx-target="#account-list" hx-swap="outerHTML">
+    <label>
+      Key
+      <input type="text" name="key" placeholder="BRI" required>
+    </label>
+    <label>
+      Balance
+      <input type="text" inputmode="decimal" name="balance" value="0" placeholder="0" required>
+    </label>
+    <label>
+      Notes
+      <input type="text" name="notes" placeholder="optional">
+    </label>
+    <button type="submit">Add account</button>
+  </form>
+
+  {{template "account-list" .}}
+</section>
+
+<section class="panel">
+  <div class="list-head">
+    <h2>Categories</h2>
+    <p class="muted">Shared by transactions, planning and to-buy items</p>
+  </div>
+
+  <form class="entry-form" hx-post="/categories" hx-target="#category-list" hx-swap="outerHTML">
+    <label>
+      Key
+      <input type="text" name="key" placeholder="Food" required>
+    </label>
+    <label>
+      Bucket
+      <select name="buckets">
+        {{range .Buckets}}<option value="{{.}}">{{bucketLabel .}}</option>{{end}}
+      </select>
+    </label>
+    <button type="submit">Add category</button>
+  </form>
+
+  {{template "category-list" .}}
+</section>
+{{end}}
+{{end}}

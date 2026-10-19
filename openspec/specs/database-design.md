@@ -271,22 +271,33 @@ account
 
 ## Money Representation
 
-Monetary values should not use floating-point representation.
+Monetary values are stored as floating-point numbers.
 
-Although the initial conceptual schema uses `float`, the implementation should use an exact representation suitable for IDR amounts.
+For SQLite this means a REAL column, and the Go side uses `float64`.
 
-For SQLite, the preferred representation is an integer containing the smallest relevant currency unit.
-
-For IDR, this can simply be the integer amount in rupiah.
-
-For example:
+Every amount is rounded to two decimal places:
 
 ```text
-Rp 25,000 → 25000
-Rp 1,500,000 → 1500000
+Rp 25,000     → 25000
+Rp 25,000.50  → 25000.50
+Rp 0.75       → 0.75
+Rp 0.756      → 0.76
 ```
 
-This avoids floating-point rounding problems.
+Rounding is applied whenever an amount is written, so a stored amount is never
+more precise than two decimal places. Account balances, planned amounts, and
+to-buy prices all follow this rule.
+
+Derived totals such as period income, period spending, and remaining planned
+amounts are summed from stored amounts and rounded to two decimal places before
+they are shown.
+
+When an amount is displayed, the decimal part appears only when it is not zero:
+
+```text
+900000    → Rp 900,000
+900000.5  → Rp 900,000.50
+```
 
 ## Soft Deletion
 

@@ -1,0 +1,81 @@
+{{define "transaction-new-content"}}
+{{with .Entry}}
+<section class="panel">
+  <div class="list-head">
+    <h1>{{if .IsEdit}}Edit transaction{{else}}Add transaction{{end}}</h1>
+    <a class="ghost-link" href="/transactions">Back to transactions</a>
+  </div>
+
+  <form
+    class="entry-form"
+    hx-post="{{if .IsEdit}}/transactions/{{.EditID}}{{else}}/transactions{{end}}"
+    hx-target="{{if .IsEdit}}#transaction-list{{else}}#dashboard-figures{{end}}"
+    hx-swap="outerHTML"
+    hx-on::after-request="if(event.detail.successful && !{{if .IsEdit}}true{{else}}false{{end}}) { window.location.href='/transactions/new' }"
+  >
+    {{if .IsEdit}}<input type="hidden" name="_method" value="PUT">{{end}}
+    <div id="entry-error"></div>
+
+    <label>
+      Type
+      <select name="type">
+        {{$current := .Form.TypeValue}}
+        {{range .Types}}
+          <option value="{{.}}"{{if eq (printf "%s" .) $current}} selected{{end}}>{{typeLabel .}}</option>
+        {{end}}
+      </select>
+    </label>
+
+    <label>
+      Amount
+      <input type="text" inputmode="decimal" name="amount" value="{{.Form.Amount}}" placeholder="25000 or 25000.50" required>
+    </label>
+
+    <label>
+      Category
+      <select name="category" required>
+        <option value="">Choose a category</option>
+        {{$currentCategory := .Form.Category}}
+        {{range .Categories}}
+          <option value="{{.Key}}"{{if eq .Key $currentCategory}} selected{{end}}>{{.Key}} ({{bucketLabel .Bucket}})</option>
+        {{end}}
+      </select>
+    </label>
+
+    <label>
+      Date and time
+      <input type="datetime-local" name="trx_time" value="{{.Form.AtValue}}">
+    </label>
+
+    <label>
+      From account
+      <select name="account_from">
+        {{$from := .Form.AccountFrom}}
+        <option value="external"{{if eq "external" $from}} selected{{end}}>External (outside my accounts)</option>
+        {{range .Accounts}}
+          <option value="{{.Key}}"{{if eq .Key $from}} selected{{end}}>{{.Key}}</option>
+        {{end}}
+      </select>
+    </label>
+
+    <label>
+      To account
+      <select name="account_to">
+        {{$to := .Form.AccountTo}}
+        <option value="external"{{if eq "external" $to}} selected{{end}}>External (outside my accounts)</option>
+        {{range .Accounts}}
+          <option value="{{.Key}}"{{if eq .Key $to}} selected{{end}}>{{.Key}}</option>
+        {{end}}
+      </select>
+    </label>
+
+    <label class="checkline">
+      <input type="checkbox" name="is_investment"{{if .Form.IsInvestment}} checked{{end}}>
+      <span>This transfer is an investment</span>
+    </label>
+
+    <button type="submit">{{if .IsEdit}}Save changes{{else}}Save transaction{{end}}</button>
+  </form>
+</section>
+{{end}}
+{{end}}
